@@ -1,8 +1,9 @@
-##第一部分
+## 第一部分
 
-###1.创建简单的Spring Security项目
+### 1.创建简单的Spring Security项目
 
-###2.默认表单认证/自定义表单认证
+### 2.默认表单认证/自定义表单认证
+
 ```
  @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -17,11 +18,13 @@
                 csrf().disable();//关闭 跨站请求伪造防护功能
     }
 ```
+
 formLogin.loginPage("/login.html") 指定了登陆的表单页面，同时生成"/login.html"的post路由表单来接收登陆参数
 所以login.html文件中的form的属性action="login.html" method="post"
 
 loginProcessingUrl 指定登录请求路径例如指定为 /login 则form表单中 action = "login"
-###3.认证与授权
+
+### 3.认证与授权
    - 3.0 基于apllication.properties
    ```
     spring.security.user.password=zhujun
