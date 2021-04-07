@@ -28,5 +28,30 @@ loginProcessingUrl 指定登录请求路径例如指定为 /login 则form表单�
     spring.security.user.name=zhujun
    ```
    - 3.1 基于内存
+   
+    @Bean
+        public UserDetailsService userDetailsService(){
+            InMemoryUserDetailsManager im = new InMemoryUserDetailsManager();
+            im.createUser(User.withUsername("user2").password("user2").roles("USER").build());
+            im.createUser(User.withUsername("admin2").password("admin2").roles("ADMIN").build());
+            return im;
+        }
+
    - 3.2 基于默认数据库类型
+   
+   默认的建表语句存在于
+   /org/springframework/security/core/userdetails/jdbc/users.ddl中
+   
+   ```
+@Bean
+    public UserDetailsService userDetailsService(){
+      JdbcUserDetailsManager im = new JdbcUserDetailsManager();
+      im.setDataSource(dataSource);
+        im.createUser(User.withUsername("user2").password("user2").roles("USER").build());
+        im.createUser(User.withUsername("admin2").password("admin2").roles("ADMIN").build());
+        return im;
+    }
+   ```
    - 3.3 基于自定义数据库模型
+   通过继承UserDetailService接口实现 loadUserByUsername方法，获取UserDetail对象
+   注意 User类继承 UserDetails时几个角色控制相关属性可以默认返回true，否则会认为账户异常。
