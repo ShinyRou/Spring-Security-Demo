@@ -1,5 +1,5 @@
-####第二部分  通过验证码案例了解认证相关的接口级使用
-####一、使用过滤器
+### 第二部分  通过验证码案例了解认证相关的接口级使用
+#### 一、使用过滤器
 - 1.实现图片验证码 
 ```
         <!--图片验证码-->
@@ -36,8 +36,8 @@
        http.addFilterBefore(new VerificationCodeFilter(),UsernamePasswordAuthenticationFilter.class);
 ```
 
-####二、使用自定义认证
-#####1.主体的定义
+#### 二、使用自定义认证
+##### 1.主体的定义
 系统中的用户称为主体，包含通过认证具有系统访问权限的用户、设备、其他系统
 Authentication 继承于Java Security 中的Principal
 ```
@@ -57,7 +57,7 @@ public interface Authentication extends Principal, Serializable {
 }
 ```
 
-#####2.AuthenticationProvider 与 ProviderManager
+##### 2.AuthenticationProvider 与 ProviderManager
 - AuthenticationProvider 被 Spring Security定义为 一个验证过程
 - Authentication 作为AuthenticationProvider 验证方法的入参
 - Providermanager 用来管理AuthenticationProvider 
@@ -66,8 +66,8 @@ public interface Authentication extends Principal, Serializable {
         return this.getAuthenticationManager().authenticate(authRequest);
     ```
 
-
-#####3.ProviderManager源码
+ 
+##### 3.ProviderManager源码
 ```
 public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Class<? extends Authentication> toTest = authentication.getClass();
@@ -103,7 +103,7 @@ public Authentication authenticate(Authentication authentication) throws Authent
 
     }
 ```
-#####4.SpringSecurity支持的认证方式与 用户名密码验证技术
+##### 4.SpringSecurity支持的认证方式与 用户名密码验证技术
 - http层面的认证技术
 - LDAP 轻量级目录访问技术
 - OpenID 聚焦于证明用户身份
