@@ -1,7 +1,12 @@
 package com.zhujun.config;
 
+import com.zhujun.authentication.MyWebAuthenticationDetails;
 import com.zhujun.filter.VerificationCodeFilter;
+import com.zhujun.provider.MyDaoAuthenticationProvier;
+import com.zhujun.source.MyWebAuthenticationDetailsSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,6 +27,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    //注入自定义的detailSource
+    @Autowired
+    private MyWebAuthenticationDetailsSource myWebAuthenticationDetailsSource;
+
+    //注入自定义的AuthenticationProvier
+    @Autowired
+    private MyDaoAuthenticationProvier myDaoAuthenticationProvier;
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+        //应用自定义的AuthenticationProvier
+        auth.authenticationProvider(myDaoAuthenticationProvier);
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -32,10 +50,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers("/app/**","/verifiedCode/**","/js/**","/css/**").permitAll().
                 anyRequest().authenticated()
                 .and().
-                formLogin().loginPage("/login.html").loginProcessingUrl("/login").permitAll()//自定义登陆页面  登录页不设限访问
+                         //应用自定义的AuthenticationDetailsSource
+                formLogin().authenticationDetailsSource(myWebAuthenticationDetailsSource)
+                         .loginPage("/login.html").loginProcessingUrl("/login").permitAll()//自定义登陆页面  登录页不设限访问
                 .and().
                 csrf().disable();
+
+
+/*              注册过滤器
                 http.addFilterBefore(new VerificationCodeFilter(),UsernamePasswordAuthenticationFilter.class);
+*/
     }
 
     @Bean
